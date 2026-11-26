@@ -1,0 +1,1380 @@
+<!DOCTYPE html>
+<html lang="es" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Auditoría de la Seguridad de T.I. | UNJFSC · Information Technology Audit</title>
+
+  <!-- Google Fonts: Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+
+  <!-- Tailwind CSS via CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Configuración personalizada de Tailwind para tipografía Inter y colores académicos -->
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'system-ui', '-apple-system', 'sans-serif'],
+          },
+          colors: {
+            brand: {
+              50: '#eef2ff',
+              100: '#e0e7ff',
+              500: '#6366f1',
+              600: '#4f46e5',
+              700: '#4338ca',
+              900: '#312e81',
+            }
+          }
+        }
+      }
+    };
+  </script>
+</head>
+<body class="bg-slate-50 text-slate-800 font-sans antialiased selection:bg-indigo-100 selection:text-indigo-800">
+
+  <!-- ===================================================================== -->
+  <!-- BARRA DE PROGRESO DE LECTURA (FIXED TOP)                              -->
+  <!-- ===================================================================== -->
+  <div class="fixed top-0 left-0 w-full h-1.5 bg-slate-200/80 z-50" aria-hidden="true">
+    <div id="reading-progress-bar" class="h-full bg-gradient-to-r from-indigo-600 via-indigo-500 to-sky-500 w-0 transition-all duration-75 ease-out rounded-r-full"></div>
+  </div>
+
+  <!-- ===================================================================== -->
+  <!-- NAVBAR STICKY CON LOGO CIRCULAR Y MENÚ HAMBURGUESA MÓVIL              -->
+  <!-- ===================================================================== -->
+  <header class="sticky top-1.5 z-40 bg-white/90 backdrop-blur-md border-b border-slate-200/80 shadow-sm">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex items-center justify-between h-16">
+
+        <!-- Logo Circular + Título del Curso -->
+        <a href="#portada" class="flex items-center gap-3 group focus:outline-none">
+          <div class="relative w-10 h-10 rounded-full ring-2 ring-indigo-600/20 group-hover:ring-indigo-600/50 transition-all overflow-hidden shrink-0 bg-indigo-600">
+            <img
+              src="https://placehold.co/80x80/4f46e5/ffffff?text=ITA"
+              alt="Logo del curso Information Technology Audit"
+              class="w-full h-full object-cover rounded-full"
+              onerror="this.onerror=null; this.src='https://placehold.co/80x80/312e81/ffffff?text=TI';"
+            />
+          </div>
+          <div class="leading-tight">
+            <span class="block text-sm font-bold text-slate-900 tracking-tight group-hover:text-indigo-600 transition-colors">
+              IT Security Audit · Grupo 06
+            </span>
+            <span class="block text-xs font-medium text-slate-500">
+              UNJFSC · Information Technology Audit
+            </span>
+          </div>
+        </a>
+
+        <!-- Menú de Navegación (Escritorio) -->
+        <nav class="hidden md:flex items-center gap-1 lg:gap-2" aria-label="Navegación principal">
+          <a href="#indice" class="px-3 py-2 text-sm font-medium text-slate-600 hover:text-indigo-600 hover:bg-indigo-50/70 rounded-lg transition-colors">Índice</a>
+          <a href="#introduccion" class="px-3 py-2 text-sm font-medium text-slate-600 hover:text-indigo-600 hover:bg-indigo-50/70 rounded-lg transition-colors">Introducción</a>
+          <a href="#objetivos" class="px-3 py-2 text-sm font-medium text-slate-600 hover:text-indigo-600 hover:bg-indigo-50/70 rounded-lg transition-colors">Objetivos</a>
+          <a href="#funcionalidades" class="px-3 py-2 text-sm font-medium text-slate-600 hover:text-indigo-600 hover:bg-indigo-50/70 rounded-lg transition-colors">Áreas</a>
+          <a href="#requisitos" class="px-3 py-2 text-sm font-medium text-slate-600 hover:text-indigo-600 hover:bg-indigo-50/70 rounded-lg transition-colors">Evidencias</a>
+          <a href="#mapeo" class="px-3 py-2 text-sm font-medium text-slate-600 hover:text-indigo-600 hover:bg-indigo-50/70 rounded-lg transition-colors">Casos y Mapeo</a>
+          <a href="#conclusiones" class="px-3 py-2 text-sm font-medium text-slate-600 hover:text-indigo-600 hover:bg-indigo-50/70 rounded-lg transition-colors">Conclusiones</a>
+        </nav>
+
+        <!-- Botón Menú Hamburguesa (Móvil) -->
+        <button
+          id="mobile-menu-btn"
+          type="button"
+          class="md:hidden inline-flex items-center justify-center p-2.5 rounded-xl text-slate-600 hover:text-indigo-600 hover:bg-slate-100 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-colors"
+          aria-controls="mobile-menu"
+          aria-expanded="false"
+          aria-label="Abrir menú de navegación"
+        >
+          <!-- Ícono Hamburguesa SVG -->
+          <svg id="icon-hamburger" class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16" />
+          </svg>
+          <!-- Ícono Cerrar SVG (oculto inicialmente) -->
+          <svg id="icon-close" class="w-6 h-6 hidden" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- Panel Desplegable del Menú Móvil -->
+    <div id="mobile-menu" class="hidden md:hidden border-t border-slate-200 bg-white shadow-lg">
+      <div class="px-4 pt-3 pb-4 space-y-1">
+        <a href="#portada" class="mobile-nav-link block px-3 py-2.5 rounded-lg text-base font-medium text-slate-700 hover:text-indigo-600 hover:bg-indigo-50">1. Portada Institucional</a>
+        <a href="#indice" class="mobile-nav-link block px-3 py-2.5 rounded-lg text-base font-medium text-slate-700 hover:text-indigo-600 hover:bg-indigo-50">2. Índice General</a>
+        <a href="#introduccion" class="mobile-nav-link block px-3 py-2.5 rounded-lg text-base font-medium text-slate-700 hover:text-indigo-600 hover:bg-indigo-50">3. Introducción y Evolución</a>
+        <a href="#objetivos" class="mobile-nav-link block px-3 py-2.5 rounded-lg text-base font-medium text-slate-700 hover:text-indigo-600 hover:bg-indigo-50">4. Objetivos de Auditoría (5)</a>
+        <a href="#funcionalidades" class="mobile-nav-link block px-3 py-2.5 rounded-lg text-base font-medium text-slate-700 hover:text-indigo-600 hover:bg-indigo-50">5. Áreas Auditables (6)</a>
+        <a href="#requisitos" class="mobile-nav-link block px-3 py-2.5 rounded-lg text-base font-medium text-slate-700 hover:text-indigo-600 hover:bg-indigo-50">6. Evidencias y CAATs (6)</a>
+        <a href="#mapeo" class="mobile-nav-link block px-3 py-2.5 rounded-lg text-base font-medium text-slate-700 hover:text-indigo-600 hover:bg-indigo-50">7. Marcos, Proceso y Casos (3)</a>
+        <a href="#conclusiones" class="mobile-nav-link block px-3 py-2.5 rounded-lg text-base font-medium text-slate-700 hover:text-indigo-600 hover:bg-indigo-50">8. Conclusiones y Recomendaciones</a>
+        <a href="#creditos-movil" class="mobile-nav-link block px-3 py-2.5 rounded-lg text-base font-medium text-indigo-700 bg-indigo-50/70">Equipo Grupo 06</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- ===================================================================== -->
+  <!-- LAYOUT PRINCIPAL: 2 COLUMNAS EN DESKTOP / 1 COLUMNA EN MÓVIL          -->
+  <!-- ===================================================================== -->
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 lg:py-12">
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10 items-start">
+
+      <!-- ================================================================= -->
+      <!-- COLUMNA IZQUIERDA: CONTENIDO PRINCIPAL DEL BLOG (8 de 12 cols)    -->
+      <!-- ================================================================= -->
+      <main class="lg:col-span-8 space-y-12 min-w-0">
+
+        <!-- =============================================================== -->
+        <!-- SECCIÓN 1: PORTADA (HERO SECTION)                               -->
+        <!-- =============================================================== -->
+        <section id="portada" class="scroll-mt-24 relative overflow-hidden rounded-3xl bg-gradient-to-br from-slate-900 via-indigo-950 to-slate-900 text-white p-8 sm:p-10 lg:p-12 shadow-xl border border-slate-800">
+          <!-- Decoración geométrica sutil en fondo -->
+          <div class="absolute -top-24 -right-24 w-72 h-72 bg-indigo-500/20 rounded-full blur-3xl pointer-events-none"></div>
+          <div class="absolute -bottom-24 -left-24 w-72 h-72 bg-sky-500/10 rounded-full blur-3xl pointer-events-none"></div>
+
+          <div class="relative z-10">
+            <!-- Etiqueta del curso -->
+            <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-indigo-500/20 border border-indigo-400/30 text-indigo-200 text-xs font-semibold uppercase tracking-wider mb-6">
+              <svg class="w-4 h-4 text-indigo-300" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+              </svg>
+              UNJFSC · Information Technology Audit · Grupo 06
+            </div>
+
+            <!-- Título Principal -->
+            <h1 class="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight leading-tight text-white mb-4">
+              Auditoría de la Seguridad de las T.I.
+            </h1>
+
+            <!-- Subtítulo -->
+            <p class="text-base sm:text-lg text-slate-300 leading-relaxed max-w-2xl mb-8">
+              Monografía educativa sobre el aseguramiento independiente basado en riesgos: fundamentos, proceso de auditoría, marcos internacionales y normativa peruana, áreas auditables, auditoría continua y análisis de casos reales (Change Healthcare y SolarWinds).
+            </p>
+
+            <!-- Datos de la Institución -->
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-6 border-t border-white/10 text-sm">
+              <div class="bg-white/5 rounded-2xl p-4 border border-white/10">
+                <span class="block text-xs uppercase tracking-wider text-indigo-300 font-semibold mb-1">Universidad y Facultad</span>
+                <span class="font-medium text-white">Universidad Nacional José Faustino Sánchez Carrión · FIISI (Ing. de Sistemas)</span>
+              </div>
+              <div class="bg-white/5 rounded-2xl p-4 border border-white/10">
+                <span class="block text-xs uppercase tracking-wider text-indigo-300 font-semibold mb-1">Docente</span>
+                <span class="font-medium text-white">Costilla Retuerto, Fernando Sosimo</span>
+              </div>
+              <div class="bg-white/5 rounded-2xl p-4 border border-white/10">
+                <span class="block text-xs uppercase tracking-wider text-indigo-300 font-semibold mb-1">Sede y Año</span>
+                <span class="font-medium text-white">Huacho - Perú · 2026</span>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- =============================================================== -->
+        <!-- SECCIÓN 2: ÍNDICE GENERAL                                       -->
+        <!-- =============================================================== -->
+        <section id="indice" class="scroll-mt-24 bg-white rounded-3xl p-6 sm:p-8 shadow-sm border border-slate-200/80">
+          <div class="flex items-center gap-3 mb-6">
+            <span class="flex items-center justify-center w-10 h-10 rounded-2xl bg-indigo-50 text-indigo-600 font-bold text-sm border border-indigo-100">02</span>
+            <div>
+              <h2 class="text-2xl font-bold text-slate-900">Índice General de la Monografía</h2>
+              <p class="text-sm text-slate-500">Estructura temática basada en los 6 capítulos del documento del Grupo 06</p>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+            <a href="#portada" class="group flex items-start gap-3 p-4 rounded-2xl border border-slate-200/80 hover:border-indigo-300 hover:bg-indigo-50/40 transition-all">
+              <span class="text-xs font-bold text-indigo-600 bg-indigo-100 px-2.5 py-1 rounded-lg">01</span>
+              <div>
+                <h3 class="text-sm font-semibold text-slate-900 group-hover:text-indigo-700">Portada Institucional</h3>
+                <p class="text-xs text-slate-500 mt-0.5">UNJFSC, FIISI, Escuela de Ing. de Sistemas y Docente</p>
+              </div>
+            </a>
+            <a href="#introduccion" class="group flex items-start gap-3 p-4 rounded-2xl border border-slate-200/80 hover:border-indigo-300 hover:bg-indigo-50/40 transition-all">
+              <span class="text-xs font-bold text-indigo-600 bg-indigo-100 px-2.5 py-1 rounded-lg">03</span>
+              <div>
+                <h3 class="text-sm font-semibold text-slate-900 group-hover:text-indigo-700">Introducción y Fundamentos (Cap. I)</h3>
+                <p class="text-xs text-slate-500 mt-0.5">Contexto 2026 ($4.99M por brecha), evolución y tríada CIA</p>
+              </div>
+            </a>
+            <a href="#objetivos" class="group flex items-start gap-3 p-4 rounded-2xl border border-slate-200/80 hover:border-indigo-300 hover:bg-indigo-50/40 transition-all">
+              <span class="text-xs font-bold text-indigo-600 bg-indigo-100 px-2.5 py-1 rounded-lg">04</span>
+              <div>
+                <h3 class="text-sm font-semibold text-slate-900 group-hover:text-indigo-700">Objetivos de Auditoría (5 Slides)</h3>
+                <p class="text-xs text-slate-500 mt-0.5">Salvaguarda, eficacia, detección, riesgo y cumplimiento</p>
+              </div>
+            </a>
+            <a href="#funcionalidades" class="group flex items-start gap-3 p-4 rounded-2xl border border-slate-200/80 hover:border-indigo-300 hover:bg-indigo-50/40 transition-all">
+              <span class="text-xs font-bold text-indigo-600 bg-indigo-100 px-2.5 py-1 rounded-lg">05</span>
+              <div>
+                <h3 class="text-sm font-semibold text-slate-900 group-hover:text-indigo-700">Áreas Auditables del Entorno (6 Slides)</h3>
+                <p class="text-xs text-slate-500 mt-0.5">Cap. IV: Gobierno, IAM, Apps, Datos, Nube e Incidentes</p>
+              </div>
+            </a>
+            <a href="#requisitos" class="group flex items-start gap-3 p-4 rounded-2xl border border-slate-200/80 hover:border-indigo-300 hover:bg-indigo-50/40 transition-all">
+              <span class="text-xs font-bold text-indigo-600 bg-indigo-100 px-2.5 py-1 rounded-lg">06</span>
+              <div>
+                <h3 class="text-sm font-semibold text-slate-900 group-hover:text-indigo-700">Evidencias, Técnicas y CAATs (6 Slides)</h3>
+                <p class="text-xs text-slate-500 mt-0.5">Cap. II y V: Pruebas, herramientas y auditoría continua</p>
+              </div>
+            </a>
+            <a href="#mapeo" class="group flex items-start gap-3 p-4 rounded-2xl border border-slate-200/80 hover:border-indigo-300 hover:bg-indigo-50/40 transition-all">
+              <span class="text-xs font-bold text-indigo-600 bg-indigo-100 px-2.5 py-1 rounded-lg">07</span>
+              <div>
+                <h3 class="text-sm font-semibold text-slate-900 group-hover:text-indigo-700">Marcos, Proceso y Casos Reales (3 Slides)</h3>
+                <p class="text-xs text-slate-500 mt-0.5">Cap. III y VI: Normativa Perú, flujo y Change Healthcare / SolarWinds</p>
+              </div>
+            </a>
+            <a href="#conclusiones" class="group flex items-start gap-3 p-4 rounded-2xl border border-slate-200/80 hover:border-indigo-300 hover:bg-indigo-50/40 transition-all sm:col-span-2">
+              <span class="text-xs font-bold text-indigo-600 bg-indigo-100 px-2.5 py-1 rounded-lg">08</span>
+              <div>
+                <h3 class="text-sm font-semibold text-slate-900 group-hover:text-indigo-700">Conclusiones y Recomendaciones</h3>
+                <p class="text-xs text-slate-500 mt-0.5">Síntesis de aseguramiento basado en riesgos y controles prioritarios</p>
+              </div>
+            </a>
+          </div>
+        </section>
+
+        <!-- =============================================================== -->
+        <!-- SECCIÓN 3: INTRODUCCIÓN Y FUNDAMENTOS (CAPÍTULO I)              -->
+        <!-- =============================================================== -->
+        <section id="introduccion" class="scroll-mt-24 bg-white rounded-3xl p-6 sm:p-8 shadow-sm border border-slate-200/80">
+          <div class="flex items-center gap-3 mb-6">
+            <span class="flex items-center justify-center w-10 h-10 rounded-2xl bg-indigo-50 text-indigo-600 font-bold text-sm border border-indigo-100">03</span>
+            <div>
+              <h2 class="text-2xl font-bold text-slate-900">Introducción y Fundamentos (Capítulo I)</h2>
+              <p class="text-sm text-slate-500">De asunto técnico aislado a riesgo de negocio y gobernanza de primer orden</p>
+            </div>
+          </div>
+
+          <div class="space-y-4 text-slate-600 leading-relaxed text-[15px]">
+            <p>
+              La <strong class="text-slate-900">Auditoría de la Seguridad de las Tecnologías de la Información (T.I.)</strong> es el examen sistemático, independiente y documentado de las políticas, procesos, personas y tecnologías que protegen la información de una organización. Su propósito es obtener evidencia objetiva para determinar si los controles están bien diseñados, operan con eficacia y preservan la tríada clásica (<strong class="text-slate-900">Confidencialidad, Integridad y Disponibilidad</strong>), junto con la <strong class="text-slate-900">trazabilidad</strong> y la <strong class="text-slate-900">resiliencia</strong>.
+            </p>
+            <p>
+              Según el informe <em>Cost of a Data Breach 2026</em> de IBM y el Ponemon Institute, el costo promedio global de una brecha de datos alcanzó un récord de <strong class="text-indigo-700">4,99 millones de dólares</strong> (+12% respecto al año anterior) y <strong class="text-slate-900">una de cada cuatro brechas maliciosas</strong> ya fue habilitada por inteligencia artificial. En este escenario, la auditoría de seguridad no es una verificación punitiva posterior, sino un mecanismo de aseguramiento basado en riesgos.
+            </p>
+          </div>
+
+          <!-- Bloque destacado de hitos y diferenciación -->
+          <div class="mt-6 grid grid-cols-1 sm:grid-cols-3 gap-4">
+            <div class="p-4 rounded-2xl bg-slate-50 border border-slate-200/80">
+              <div class="flex items-center gap-2 text-indigo-600 font-semibold text-sm mb-1.5">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" /></svg>
+                Evolución 1969–2026
+              </div>
+              <p class="text-xs text-slate-600">Desde ISACA (1969) y SOX (2002) hasta ISO/IEC 27001:2022, NIST CSF 2.0 (2024) y el Requisito Temático de Ciberseguridad del IIA (febrero 2026).</p>
+            </div>
+            <div class="p-4 rounded-2xl bg-slate-50 border border-slate-200/80">
+              <div class="flex items-center gap-2 text-indigo-600 font-semibold text-sm mb-1.5">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                Perfil del Auditor
+              </div>
+              <p class="text-xs text-slate-600">Principios éticos de independencia, competencia, confidencialidad e integridad; respaldados por certificaciones como CISA, CISM, CRISC, CISSP e ISO 27001 LA.</p>
+            </div>
+            <div class="p-4 rounded-2xl bg-slate-50 border border-slate-200/80">
+              <div class="flex items-center gap-2 text-indigo-600 font-semibold text-sm mb-1.5">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" /></svg>
+                Normativa en Perú
+              </div>
+              <p class="text-xs text-slate-600">Ley N.º 29733 y nuevo Reglamento DS N.º 016-2024-JUS (vigente desde 2025), Ley 30096, DU 007-2020, Ley 31814 (IA) y Resolución SBS N.º 504-2021.</p>
+            </div>
+          </div>
+        </section>
+
+        <!-- =============================================================== -->
+        <!-- SECCIÓN 4: OBJETIVOS DE LA AUDITORÍA DE SEGURIDAD (5 SLIDES)    -->
+        <!-- =============================================================== -->
+        <section id="objetivos" class="scroll-mt-24 space-y-6">
+          <div class="flex items-center justify-between flex-wrap gap-3">
+            <div class="flex items-center gap-3">
+              <span class="flex items-center justify-center w-10 h-10 rounded-2xl bg-indigo-600 text-white font-bold text-sm shadow-sm">04</span>
+              <div>
+                <h2 class="text-2xl font-bold text-slate-900">Objetivos de la Auditoría de Seguridad</h2>
+                <p class="text-sm text-slate-500">5 propósitos estratégicos que orientan la planificación y el alcance (Sección 1.2)</p>
+              </div>
+            </div>
+            <span class="px-3 py-1 rounded-full text-xs font-semibold bg-indigo-50 text-indigo-700 border border-indigo-100">5 Diapositivas</span>
+          </div>
+
+          <div class="grid grid-cols-1 gap-5">
+            <!-- Slide 1/5 -->
+            <article class="bg-white rounded-3xl p-6 shadow-sm border border-slate-200/80 hover:shadow-md transition-shadow">
+              <div class="flex items-start justify-between gap-4 mb-4">
+                <div class="flex items-center gap-3">
+                  <div class="w-11 h-11 rounded-2xl bg-indigo-50 text-indigo-600 flex items-center justify-center shrink-0">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                    </svg>
+                  </div>
+                  <div>
+                    <span class="text-xs font-bold uppercase tracking-wider text-indigo-600">Objetivo 01 · Slide 1/5</span>
+                    <h3 class="text-lg font-bold text-slate-900">Salvaguarda de Activos de Información</h3>
+                  </div>
+                </div>
+              </div>
+              <ul class="space-y-2.5 text-sm text-slate-600">
+                <li class="flex items-start gap-2.5"><span class="w-1.5 h-1.5 rounded-full bg-indigo-500 mt-2 shrink-0"></span>Verificar que datos, sistemas, software e identidades con acceso estén protegidos frente a pérdida, robo, alteración o uso no autorizado.</li>
+                <li class="flex items-start gap-2.5"><span class="w-1.5 h-1.5 rounded-full bg-indigo-500 mt-2 shrink-0"></span>Preservar la tríada CIA: confidencialidad, integridad y disponibilidad de los activos críticos del negocio.</li>
+                <li class="flex items-start gap-2.5"><span class="w-1.5 h-1.5 rounded-full bg-indigo-500 mt-2 shrink-0"></span>Asegurar la trazabilidad de acciones mediante bitácoras protegidas contra alteración y atribuibles a una identidad única.</li>
+                <li class="flex items-start gap-2.5"><span class="w-1.5 h-1.5 rounded-full bg-indigo-500 mt-2 shrink-0"></span>Delimitar formalmente el alcance de activos, ubicaciones y periodos evaluados en el memorando de planificación.</li>
+              </ul>
+            </article>
+
+            <!-- Slide 2/5 -->
+            <article class="bg-white rounded-3xl p-6 shadow-sm border border-slate-200/80 hover:shadow-md transition-shadow">
+              <div class="flex items-start justify-between gap-4 mb-4">
+                <div class="flex items-center gap-3">
+                  <div class="w-11 h-11 rounded-2xl bg-sky-50 text-sky-600 flex items-center justify-center shrink-0">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                  </div>
+                  <div>
+                    <span class="text-xs font-bold uppercase tracking-wider text-sky-600">Objetivo 02 · Slide 2/5</span>
+                    <h3 class="text-lg font-bold text-slate-900">Eficacia en el Diseño y Operación de Controles</h3>
+                  </div>
+                </div>
+              </div>
+              <ul class="space-y-2.5 text-sm text-slate-600">
+                <li class="flex items-start gap-2.5"><span class="w-1.5 h-1.5 rounded-full bg-sky-500 mt-2 shrink-0"></span>Comprobar que los controles organizativos, de personas, físicos y tecnológicos están diseñados adecuadamente para el riesgo que mitigan.</li>
+                <li class="flex items-start gap-2.5"><span class="w-1.5 h-1.5 rounded-full bg-sky-500 mt-2 shrink-0"></span>Validar que los controles operan de manera consistente durante todo el periodo evaluado mediante pruebas de cumplimiento y sustantivas.</li>
+                <li class="flex items-start gap-2.5"><span class="w-1.5 h-1.5 rounded-full bg-sky-500 mt-2 shrink-0"></span>Corroborar lo declarado en entrevistas contra evidencia técnica extraída directamente de configuraciones y registros del sistema.</li>
+                <li class="flex items-start gap-2.5"><span class="w-1.5 h-1.5 rounded-full bg-sky-500 mt-2 shrink-0"></span>Documentar papeles de trabajo reproducibles y protegidos que sustenten conclusiones defendibles ante la gerencia.</li>
+              </ul>
+            </article>
+
+            <!-- Slide 3/5 -->
+            <article class="bg-white rounded-3xl p-6 shadow-sm border border-slate-200/80 hover:shadow-md transition-shadow">
+              <div class="flex items-start justify-between gap-4 mb-4">
+                <div class="flex items-center gap-3">
+                  <div class="w-11 h-11 rounded-2xl bg-emerald-50 text-emerald-600 flex items-center justify-center shrink-0">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" />
+                    </svg>
+                  </div>
+                  <div>
+                    <span class="text-xs font-bold uppercase tracking-wider text-emerald-600">Objetivo 03 · Slide 3/5</span>
+                    <h3 class="text-lg font-bold text-slate-900">Capacidad de Detección, Respuesta y Resiliencia</h3>
+                  </div>
+                </div>
+              </div>
+              <ul class="space-y-2.5 text-sm text-slate-600">
+                <li class="flex items-start gap-2.5"><span class="w-1.5 h-1.5 rounded-full bg-emerald-500 mt-2 shrink-0"></span>Determinar si la organización identifica a tiempo eventos de seguridad mediante SIEM/SOC y atiende las alertas con criterios claros.</li>
+                <li class="flex items-start gap-2.5"><span class="w-1.5 h-1.5 rounded-full bg-emerald-500 mt-2 shrink-0"></span>Evaluar la capacidad real de contención y recuperación del servicio ante ransomware o ataques destructivos.</li>
+                <li class="flex items-start gap-2.5"><span class="w-1.5 h-1.5 rounded-full bg-emerald-500 mt-2 shrink-0"></span>Verificar la ejecución periódica de simulacros, ejercicios de mesa y pruebas reales de restauración de respaldos aislados.</li>
+                <li class="flex items-start gap-2.5"><span class="w-1.5 h-1.5 rounded-full bg-emerald-500 mt-2 shrink-0"></span>Promover la automatización en seguridad, que según IBM (2026) reduce el costo promedio de una brecha en ~$1,9 millones.</li>
+              </ul>
+            </article>
+
+            <!-- Slide 4/5 -->
+            <article class="bg-white rounded-3xl p-6 shadow-sm border border-slate-200/80 hover:shadow-md transition-shadow">
+              <div class="flex items-start justify-between gap-4 mb-4">
+                <div class="flex items-center gap-3">
+                  <div class="w-11 h-11 rounded-2xl bg-amber-50 text-amber-600 flex items-center justify-center shrink-0">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                    </svg>
+                  </div>
+                  <div>
+                    <span class="text-xs font-bold uppercase tracking-wider text-amber-600">Objetivo 04 · Slide 4/5</span>
+                    <h3 class="text-lg font-bold text-slate-900">Gestión del Riesgo Tecnológico y de Terceros</h3>
+                  </div>
+                </div>
+              </div>
+              <ul class="space-y-2.5 text-sm text-slate-600">
+                <li class="flex items-start gap-2.5"><span class="w-1.5 h-1.5 rounded-full bg-amber-500 mt-2 shrink-0"></span>Constatar que los riesgos de seguridad se identifican, valoran (matriz 5×5) y tratan conforme al apetito de riesgo aprobado.</li>
+                <li class="flex items-start gap-2.5"><span class="w-1.5 h-1.5 rounded-full bg-amber-500 mt-2 shrink-0"></span>Priorizar el esfuerzo auditor en riesgos críticos como cuentas privilegiadas sin MFA, respaldos sin aislamiento y parches pendientes.</li>
+                <li class="flex items-start gap-2.5"><span class="w-1.5 h-1.5 rounded-full bg-amber-500 mt-2 shrink-0"></span>Evaluar riesgos de concentración, proveedores de nube y cadena de suministro de software (informes SOC 2, ISO 27001, SBOM).</li>
+                <li class="flex items-start gap-2.5"><span class="w-1.5 h-1.5 rounded-full bg-amber-500 mt-2 shrink-0"></span>Incorporar el riesgo emergente de inteligencia artificial y <em>shadow AI</em> (brechas habilitadas por IA crecieron 56% en un año).</li>
+              </ul>
+            </article>
+
+            <!-- Slide 5/5 -->
+            <article class="bg-white rounded-3xl p-6 shadow-sm border border-slate-200/80 hover:shadow-md transition-shadow">
+              <div class="flex items-start justify-between gap-4 mb-4">
+                <div class="flex items-center gap-3">
+                  <div class="w-11 h-11 rounded-2xl bg-violet-50 text-violet-600 flex items-center justify-center shrink-0">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M3 6l3 1m0 0l-3 9a5.002 5.002 0 006.001 0M6 7l3 9M6 7l6-2m6 2l3-1m-3 1l-3 9a5.002 5.002 0 006.001 0M18 7l3 9m-3-9l-6-2m0-2v2m0 16V5m0 16H9m3 0h3" />
+                    </svg>
+                  </div>
+                  <div>
+                    <span class="text-xs font-bold uppercase tracking-wider text-violet-600">Objetivo 05 · Slide 5/5</span>
+                    <h3 class="text-lg font-bold text-slate-900">Cumplimiento Normativo, Contractual y Profesional</h3>
+                  </div>
+                </div>
+              </div>
+              <ul class="space-y-2.5 text-sm text-slate-600">
+                <li class="flex items-start gap-2.5"><span class="w-1.5 h-1.5 rounded-full bg-violet-500 mt-2 shrink-0"></span>Verificar observancia de estándares internacionales vigentes: ISO/IEC 27001:2022, COBIT 2019, NIST CSF 2.0 y PCI DSS 4.0.1.</li>
+                <li class="flex items-start gap-2.5"><span class="w-1.5 h-1.5 rounded-full bg-violet-500 mt-2 shrink-0"></span>Asegurar el cumplimiento del Requisito Temático de Ciberseguridad del IIA, obligatorio desde el 5 de febrero de 2026.</li>
+                <li class="flex items-start gap-2.5"><span class="w-1.5 h-1.5 rounded-full bg-violet-500 mt-2 shrink-0"></span>Comprobar adecuación en el Perú a la Ley N.º 29733 y su nuevo Reglamento (DS N.º 016-2024-JUS), Oficial de Datos y evaluaciones de impacto.</li>
+                <li class="flex items-start gap-2.5"><span class="w-1.5 h-1.5 rounded-full bg-violet-500 mt-2 shrink-0"></span>Validar obligaciones sectoriales como la Resolución SBS N.º 504-2021 (sector financiero), DU 007-2020 y Ley N.º 30096.</li>
+              </ul>
+            </article>
+          </div>
+        </section>
+
+        <!-- =============================================================== -->
+        <!-- SECCIÓN 5: ÁREAS AUDITABLES DEL ENTORNO TECNOLÓGICO (6 SLIDES)  -->
+        <!-- =============================================================== -->
+        <section id="funcionalidades" class="scroll-mt-24 space-y-6">
+          <div class="flex items-center justify-between flex-wrap gap-3">
+            <div class="flex items-center gap-3">
+              <span class="flex items-center justify-center w-10 h-10 rounded-2xl bg-indigo-600 text-white font-bold text-sm shadow-sm">05</span>
+              <div>
+                <h2 class="text-2xl font-bold text-slate-900">Áreas Auditables de la Seguridad (Capítulo IV)</h2>
+                <p class="text-sm text-slate-500">6 capas interdependientes del entorno tecnológico y su relación con los objetivos</p>
+              </div>
+            </div>
+            <span class="px-3 py-1 rounded-full text-xs font-semibold bg-indigo-50 text-indigo-700 border border-indigo-100">6 Diapositivas</span>
+          </div>
+
+          <!-- Diagrama de las 6 capas auditables (basado en Figura 5 del PDF) -->
+          <div class="bg-white rounded-3xl p-6 shadow-sm border border-slate-200/80">
+            <h3 class="text-sm font-bold text-slate-900 uppercase tracking-wider mb-4">Arquitectura de Capas Interdependientes (Figura 5 del Informe)</h3>
+            <div class="w-full overflow-x-auto">
+              <svg viewBox="0 0 760 175" class="w-full h-auto min-w-[540px]" role="img" aria-label="Diagrama de las 6 capas del entorno de seguridad de TI y sus objetivos asociados">
+                <!-- Capa Superior -->
+                <rect x="20" y="10" width="720" height="36" rx="10" fill="#eef2ff" stroke="#6366f1" stroke-width="1.5" />
+                <text x="380" y="33" text-anchor="middle" fill="#312e81" font-size="13" font-weight="700" font-family="Inter, sans-serif">CAPAS DEL ENTORNO DE SEGURIDAD DE T.I. Y ÁREAS DE AUDITORÍA</text>
+
+                <!-- Líneas conectoras -->
+                <line x1="80" y1="46" x2="80" y2="72" stroke="#94a3b8" stroke-width="1.5" />
+                <line x1="200" y1="46" x2="200" y2="72" stroke="#94a3b8" stroke-width="1.5" />
+                <line x1="320" y1="46" x2="320" y2="72" stroke="#94a3b8" stroke-width="1.5" />
+                <line x1="440" y1="46" x2="440" y2="72" stroke="#94a3b8" stroke-width="1.5" />
+                <line x1="560" y1="46" x2="560" y2="72" stroke="#94a3b8" stroke-width="1.5" />
+                <line x1="680" y1="46" x2="680" y2="72" stroke="#94a3b8" stroke-width="1.5" />
+
+                <!-- 6 Áreas Auditables -->
+                <g font-family="Inter, sans-serif" text-anchor="middle">
+                  <rect x="25" y="72" width="110" height="84" rx="12" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.5" />
+                  <text x="80" y="96" fill="#4f46e5" font-size="11" font-weight="700">4.1 Gobierno</text>
+                  <text x="80" y="115" fill="#475569" font-size="10">Políticas, Roles</text>
+                  <text x="80" y="129" fill="#475569" font-size="10">Riesgos e IA</text>
+                  <text x="80" y="147" fill="#0284c7" font-size="9" font-weight="600">Obj. 4, 5</text>
+
+                  <rect x="145" y="72" width="110" height="84" rx="12" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.5" />
+                  <text x="200" y="96" fill="#4f46e5" font-size="11" font-weight="700">4.2 Accesos</text>
+                  <text x="200" y="115" fill="#475569" font-size="10">IAM, MFA,</text>
+                  <text x="200" y="129" fill="#475569" font-size="10">RBAC y PAM</text>
+                  <text x="200" y="147" fill="#0284c7" font-size="9" font-weight="600">Obj. 1, 2</text>
+
+                  <rect x="265" y="72" width="110" height="84" rx="12" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.5" />
+                  <text x="320" y="96" fill="#4f46e5" font-size="11" font-weight="700">4.3 Aplicaciones</text>
+                  <text x="320" y="115" fill="#475569" font-size="10">OWASP, CI/CD</text>
+                  <text x="320" y="129" fill="#475569" font-size="10">y SBOM</text>
+                  <text x="320" y="147" fill="#0284c7" font-size="9" font-weight="600">Obj. 1, 2, 4</text>
+
+                  <rect x="385" y="72" width="110" height="84" rx="12" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.5" />
+                  <text x="440" y="96" fill="#4f46e5" font-size="11" font-weight="700">4.4 Datos / BD</text>
+                  <text x="440" y="115" fill="#475569" font-size="10">Cifrado, DLP</text>
+                  <text x="440" y="129" fill="#475569" font-size="10">y Respaldos</text>
+                  <text x="440" y="147" fill="#0284c7" font-size="9" font-weight="600">Obj. 1, 5</text>
+
+                  <rect x="505" y="72" width="110" height="84" rx="12" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.5" />
+                  <text x="560" y="96" fill="#4f46e5" font-size="11" font-weight="700">4.5 Redes/Nube</text>
+                  <text x="560" y="115" fill="#475569" font-size="10">Firewall, CSPM</text>
+                  <text x="560" y="129" fill="#475569" font-size="10">y Parches</text>
+                  <text x="560" y="147" fill="#0284c7" font-size="9" font-weight="600">Obj. 2, 4</text>
+
+                  <rect x="625" y="72" width="110" height="84" rx="12" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.5" />
+                  <text x="680" y="96" fill="#4f46e5" font-size="11" font-weight="700">4.6 Incidentes</text>
+                  <text x="680" y="115" fill="#475569" font-size="10">SIEM, SOC y</text>
+                  <text x="680" y="129" fill="#475569" font-size="10">Continuidad</text>
+                  <text x="680" y="147" fill="#0284c7" font-size="9" font-weight="600">Obj. 3</text>
+                </g>
+              </svg>
+            </div>
+          </div>
+
+          <!-- 6 Slides de Áreas Auditables -->
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+            <!-- Slide 1/6 -->
+            <article class="bg-white rounded-3xl p-6 shadow-sm border border-slate-200/80 flex flex-col justify-between">
+              <div>
+                <div class="flex items-center justify-between mb-3">
+                  <span class="text-xs font-bold uppercase tracking-wider text-indigo-600">Slide 1/6 · Capa 1: Gobierno</span>
+                  <span class="px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-violet-50 text-violet-700 border border-violet-100">Obj. 4 y 5</span>
+                </div>
+                <h3 class="text-base font-bold text-slate-900 mb-2">4.1 Gobierno de la Seguridad y Cumplimiento</h3>
+                <p class="text-sm text-slate-600 mb-3">Evalúa si existe respaldo institucional sólido: estrategia aprobada, comités, presupuesto proporcional al riesgo y gobierno de la IA.</p>
+                <ul class="space-y-1.5 text-xs text-slate-600">
+                  <li>• Definición del responsable de seguridad (CISO) y su línea de reporte.</li>
+                  <li>• Gestión de riesgos de proveedores con acceso a datos críticos.</li>
+                  <li>• Control sobre adopción acelerada de sistemas de IA (ISO/IEC 42001).</li>
+                </ul>
+              </div>
+            </article>
+
+            <!-- Slide 2/6 -->
+            <article class="bg-white rounded-3xl p-6 shadow-sm border border-slate-200/80 flex flex-col justify-between">
+              <div>
+                <div class="flex items-center justify-between mb-3">
+                  <span class="text-xs font-bold uppercase tracking-wider text-indigo-600">Slide 2/6 · Capa 2: Identidades</span>
+                  <span class="px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-indigo-50 text-indigo-700 border border-indigo-100">Obj. 1 y 2</span>
+                </div>
+                <h3 class="text-base font-bold text-slate-900 mb-2">4.2 Seguridad Lógica y Control de Accesos</h3>
+                <p class="text-sm text-slate-600 mb-3">Área con mayor frecuencia de hallazgos por acumulación de privilegios y robo de credenciales como vía común de intrusión.</p>
+                <ul class="space-y-1.5 text-xs text-slate-600">
+                  <li>• Altas/bajas formales, privilegio mínimo (RBAC) y segregación de funciones.</li>
+                  <li>• Autenticación multifactor (MFA) obligatoria en accesos remotos y privilegiados.</li>
+                  <li>• Control de cuentas de servicio, identidades no humanas y recertificación periódica.</li>
+                </ul>
+              </div>
+            </article>
+
+            <!-- Slide 3/6 -->
+            <article class="bg-white rounded-3xl p-6 shadow-sm border border-slate-200/80 flex flex-col justify-between">
+              <div>
+                <div class="flex items-center justify-between mb-3">
+                  <span class="text-xs font-bold uppercase tracking-wider text-indigo-600">Slide 3/6 · Capa 3: Software</span>
+                  <span class="px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-sky-50 text-sky-700 border border-sky-100">Obj. 1, 2 y 4</span>
+                </div>
+                <h3 class="text-base font-bold text-slate-900 mb-2">4.3 Seguridad de Aplicaciones y DevSecOps</h3>
+                <p class="text-sm text-slate-600 mb-3">Examina tanto los controles embebidos en el software como la seguridad del ciclo de desarrollo, pipelines CI/CD y cadena de suministro.</p>
+                <ul class="space-y-1.5 text-xs text-slate-600">
+                  <li>• Validación de entradas, protección de APIs y referencia OWASP Top 10.</li>
+                  <li>• Separación de entornos, revisión por pares y gestión formal de cambios.</li>
+                  <li>• Inventario de componentes (SBOM) y protección del entorno de compilación (NIST SSDF).</li>
+                </ul>
+              </div>
+            </article>
+
+            <!-- Slide 4/6 -->
+            <article class="bg-white rounded-3xl p-6 shadow-sm border border-slate-200/80 flex flex-col justify-between">
+              <div>
+                <div class="flex items-center justify-between mb-3">
+                  <span class="text-xs font-bold uppercase tracking-wider text-indigo-600">Slide 4/6 · Capa 4: Información</span>
+                  <span class="px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-amber-50 text-amber-700 border border-amber-100">Obj. 1 y 5</span>
+                </div>
+                <h3 class="text-base font-bold text-slate-900 mb-2">4.4 Seguridad de Datos y Bases de Datos</h3>
+                <p class="text-sm text-slate-600 mb-3">Protege el activo más valioso revisando configuración del motor de datos, accesos DBA, cifrado y recuperabilidad real.</p>
+                <ul class="space-y-1.5 text-xs text-slate-600">
+                  <li>• Clasificación, cifrado en reposo/tránsito, DLP y enmascaramiento en pruebas.</li>
+                  <li>• Auditoría nativa activa con bitácoras resguardadas fuera del alcance del DBA.</li>
+                  <li>• Respaldos aislados/inmutables frente a ransomware con pruebas de restauración y Ley 29733.</li>
+                </ul>
+              </div>
+            </article>
+
+            <!-- Slide 5/6 -->
+            <article class="bg-white rounded-3xl p-6 shadow-sm border border-slate-200/80 flex flex-col justify-between">
+              <div>
+                <div class="flex items-center justify-between mb-3">
+                  <span class="text-xs font-bold uppercase tracking-wider text-indigo-600">Slide 5/6 · Capa 5: Plataformas</span>
+                  <span class="px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-sky-50 text-sky-700 border border-sky-100">Obj. 2 y 4</span>
+                </div>
+                <h3 class="text-base font-bold text-slate-900 mb-2">4.5 Infraestructura, Redes y Nube</h3>
+                <p class="text-sm text-slate-600 mb-3">Evalúa el modelo de responsabilidad compartida en nube (donde los errores de configuración del cliente causan la mayoría de brechas).</p>
+                <ul class="space-y-1.5 text-xs text-slate-600">
+                  <li>• Revisión de IAM en nube, exposición pública, gestión de claves y estrategia de salida.</li>
+                  <li>• Segmentación de zonas, reglas de firewall y arquitectura Zero Trust (NIST SP 800-207).</li>
+                  <li>• Inventario de activos y gestión de parches priorizando el catálogo CISA KEV.</li>
+                </ul>
+              </div>
+            </article>
+
+            <!-- Slide 6/6 -->
+            <article class="bg-white rounded-3xl p-6 shadow-sm border border-slate-200/80 flex flex-col justify-between">
+              <div>
+                <div class="flex items-center justify-between mb-3">
+                  <span class="text-xs font-bold uppercase tracking-wider text-indigo-600">Slide 6/6 · Capa 6: Continuidad</span>
+                  <span class="px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-emerald-50 text-emerald-700 border border-emerald-100">Obj. 3</span>
+                </div>
+                <h3 class="text-base font-bold text-slate-900 mb-2">4.6 Gestión de Incidentes y Resiliencia</h3>
+                <p class="text-sm text-slate-600 mb-3">Dado que la prevención nunca es absoluta, mide la preparación real para detectar, contener y recuperar operaciones críticas.</p>
+                <ul class="space-y-1.5 text-xs text-slate-600">
+                  <li>• Plan de respuesta aprobado con roles, escalamiento y canales de comunicación.</li>
+                  <li>• Monitoreo continuo (SIEM/SOC) y verificación de tiempos de detección y contención.</li>
+                  <li>• Simulacros, ejercicios de mesa y pruebas documentadas de continuidad del negocio.</li>
+                </ul>
+              </div>
+            </article>
+          </div>
+        </section>
+
+        <!-- =============================================================== -->
+        <!-- SECCIÓN 6: EVIDENCIAS, TÉCNICAS Y HERRAMIENTAS CAATs (6 SLIDES) -->
+        <!-- =============================================================== -->
+        <section id="requisitos" class="scroll-mt-24 space-y-6">
+          <div class="flex items-center justify-between flex-wrap gap-3">
+            <div class="flex items-center gap-3">
+              <span class="flex items-center justify-center w-10 h-10 rounded-2xl bg-indigo-600 text-white font-bold text-sm shadow-sm">06</span>
+              <div>
+                <h2 class="text-2xl font-bold text-slate-900">Requisitos de Información, Evidencias y CAATs</h2>
+                <p class="text-sm text-slate-500">Datos, pruebas de auditoría y herramientas de apoyo por área (Capítulos II, IV y V)</p>
+              </div>
+            </div>
+            <span class="px-3 py-1 rounded-full text-xs font-semibold bg-indigo-50 text-indigo-700 border border-indigo-100">6 Diapositivas</span>
+          </div>
+
+          <div class="space-y-5">
+            <!-- Slide 1/6 -->
+            <div class="bg-white rounded-3xl p-6 shadow-sm border border-slate-200/80">
+              <span class="text-xs font-bold uppercase tracking-wider text-indigo-600">Slide 1/6 · Área 4.1 (Gobierno y Cumplimiento)</span>
+              <h3 class="text-lg font-bold text-slate-900 mt-1 mb-4">RI-01: Documentación del SGSI, Riesgos y Normativa</h3>
+              <div class="overflow-x-auto rounded-2xl border border-slate-200">
+                <table class="w-full text-left text-sm">
+                  <thead class="bg-slate-50 text-slate-700 text-xs uppercase">
+                    <tr>
+                      <th class="px-4 py-3 font-semibold">Evidencia / Dato Requerido</th>
+                      <th class="px-4 py-3 font-semibold">Técnica de Auditoría</th>
+                      <th class="px-4 py-3 font-semibold">Ejemplo Concreto</th>
+                    </tr>
+                  </thead>
+                  <tbody class="divide-y divide-slate-200 text-slate-600 text-xs sm:text-sm">
+                    <tr>
+                      <td class="px-4 py-3 font-medium text-slate-900">Declaración de Aplicabilidad (SoA)</td>
+                      <td class="px-4 py-3">Inspección documental</td>
+                      <td class="px-4 py-3">Justificación de los 93 controles ISO/IEC 27002:2022 y actas de comité</td>
+                    </tr>
+                    <tr>
+                      <td class="px-4 py-3 font-medium text-slate-900">Matriz de Cumplimiento Legal</td>
+                      <td class="px-4 py-3">Inspección y entrevista</td>
+                      <td class="px-4 py-3">Designación de Oficial de Datos (DS 016-2024-JUS) e informe SBS 504-2021</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <!-- Slide 2/6 -->
+            <div class="bg-white rounded-3xl p-6 shadow-sm border border-slate-200/80">
+              <span class="text-xs font-bold uppercase tracking-wider text-indigo-600">Slide 2/6 · Área 4.2 (Seguridad Lógica y Accesos)</span>
+              <h3 class="text-lg font-bold text-slate-900 mt-1 mb-4">RI-02: Directorios de Usuarios, Nómina y MFA (CAATs)</h3>
+              <div class="overflow-x-auto rounded-2xl border border-slate-200">
+                <table class="w-full text-left text-sm">
+                  <thead class="bg-slate-50 text-slate-700 text-xs uppercase">
+                    <tr>
+                      <th class="px-4 py-3 font-semibold">Evidencia / Dato Requerido</th>
+                      <th class="px-4 py-3 font-semibold">Técnica / Herramienta</th>
+                      <th class="px-4 py-3 font-semibold">Ejemplo Concreto</th>
+                    </tr>
+                  </thead>
+                  <tbody class="divide-y divide-slate-200 text-slate-600 text-xs sm:text-sm">
+                    <tr>
+                      <td class="px-4 py-3 font-medium text-slate-900">Cuentas Activas vs. Nómina Vigente</td>
+                      <td class="px-4 py-3">Análisis de datos (SQL / Python)</td>
+                      <td class="px-4 py-3">Detección de cuentas huérfanas de exempleados o proveedores sin contrato</td>
+                    </tr>
+                    <tr>
+                      <td class="px-4 py-3 font-medium text-slate-900">Configuración de MFA y Privilegios</td>
+                      <td class="px-4 py-3">Inspección técnica y reejecución</td>
+                      <td class="px-4 py-3">Hallazgo: 23% de cuentas administrativas sin MFA por excepciones sin vencimiento</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <!-- Slide 3/6 -->
+            <div class="bg-white rounded-3xl p-6 shadow-sm border border-slate-200/80">
+              <span class="text-xs font-bold uppercase tracking-wider text-indigo-600">Slide 3/6 · Área 4.3 (Aplicaciones y Cadena de Suministro)</span>
+              <h3 class="text-lg font-bold text-slate-900 mt-1 mb-4">RI-03: Análisis de Código, Cambios y Componentes (SBOM)</h3>
+              <div class="overflow-x-auto rounded-2xl border border-slate-200">
+                <table class="w-full text-left text-sm">
+                  <thead class="bg-slate-50 text-slate-700 text-xs uppercase">
+                    <tr>
+                      <th class="px-4 py-3 font-semibold">Evidencia / Dato Requerido</th>
+                      <th class="px-4 py-3 font-semibold">Técnica de Auditoría</th>
+                      <th class="px-4 py-3 font-semibold">Ejemplo Concreto</th>
+                    </tr>
+                  </thead>
+                  <tbody class="divide-y divide-slate-200 text-slate-600 text-xs sm:text-sm">
+                    <tr>
+                      <td class="px-4 py-3 font-medium text-slate-900">Muestra de Cambios en Producción</td>
+                      <td class="px-4 py-3">Inspección documental y CI/CD</td>
+                      <td class="px-4 py-3">Ticket aprobado, revisión por tercero distinto al autor y plan de reversión</td>
+                    </tr>
+                    <tr>
+                      <td class="px-4 py-3 font-medium text-slate-900">Inventario SBOM y Reportes OWASP</td>
+                      <td class="px-4 py-3">Inspección técnica</td>
+                      <td class="px-4 py-3">Verificación de integridad de dependencias y contratos/SOC 2 de proveedores</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <!-- Slide 4/6 -->
+            <div class="bg-white rounded-3xl p-6 shadow-sm border border-slate-200/80">
+              <span class="text-xs font-bold uppercase tracking-wider text-indigo-600">Slide 4/6 · Área 4.4 (Datos y Bases de Datos)</span>
+              <h3 class="text-lg font-bold text-slate-900 mt-1 mb-4">RI-04: Privilegios DBA, Cifrado y Pruebas de Restauración</h3>
+              <div class="overflow-x-auto rounded-2xl border border-slate-200">
+                <table class="w-full text-left text-sm">
+                  <thead class="bg-slate-50 text-slate-700 text-xs uppercase">
+                    <tr>
+                      <th class="px-4 py-3 font-semibold">Evidencia / Dato Requerido</th>
+                      <th class="px-4 py-3 font-semibold">Técnica de Auditoría</th>
+                      <th class="px-4 py-3 font-semibold">Ejemplo Concreto</th>
+                    </tr>
+                  </thead>
+                  <tbody class="divide-y divide-slate-200 text-slate-600 text-xs sm:text-sm">
+                    <tr>
+                      <td class="px-4 py-3 font-medium text-slate-900">Cuentas DBA y Configuración de Cifrado</td>
+                      <td class="px-4 py-3">Inspección técnica</td>
+                      <td class="px-4 py-3">Verificación de cifrado en reposo/tránsito, enmascaramiento y logs nativos</td>
+                    </tr>
+                    <tr>
+                      <td class="px-4 py-3 font-medium text-slate-900">Registros de Respaldos Inmutables</td>
+                      <td class="px-4 py-3">Observación directa</td>
+                      <td class="px-4 py-3">Presenciar una restauración real de respaldo aislado para validar RPO/RTO</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <!-- Slide 5/6 -->
+            <div class="bg-white rounded-3xl p-6 shadow-sm border border-slate-200/80">
+              <span class="text-xs font-bold uppercase tracking-wider text-indigo-600">Slide 5/6 · Área 4.5 (Infraestructura, Redes y Nube)</span>
+              <h3 class="text-lg font-bold text-slate-900 mt-1 mb-4">RI-05: Escaneos de Vulnerabilidades y Postura en Nube</h3>
+              <div class="overflow-x-auto rounded-2xl border border-slate-200">
+                <table class="w-full text-left text-sm">
+                  <thead class="bg-slate-50 text-slate-700 text-xs uppercase">
+                    <tr>
+                      <th class="px-4 py-3 font-semibold">Evidencia / Dato Requerido</th>
+                      <th class="px-4 py-3 font-semibold">Herramienta / Técnica</th>
+                      <th class="px-4 py-3 font-semibold">Ejemplo Concreto</th>
+                    </tr>
+                  </thead>
+                  <tbody class="divide-y divide-slate-200 text-slate-600 text-xs sm:text-sm">
+                    <tr>
+                      <td class="px-4 py-3 font-medium text-slate-900">Informes de Escaneo Autenticado</td>
+                      <td class="px-4 py-3">Escáneres y NIST SP 800-115</td>
+                      <td class="px-4 py-3">Parches críticos pendientes priorizados contra el catálogo CISA KEV</td>
+                    </tr>
+                    <tr>
+                      <td class="px-4 py-3 font-medium text-slate-900">Políticas IAM y Reglas de Red</td>
+                      <td class="px-4 py-3">Herramientas CSPM</td>
+                      <td class="px-4 py-3">Detección de buckets o servidores expuestos públicamente y brechas de línea base</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <!-- Slide 6/6 -->
+            <div class="bg-white rounded-3xl p-6 shadow-sm border border-slate-200/80">
+              <span class="text-xs font-bold uppercase tracking-wider text-indigo-600">Slide 6/6 · Área 4.6 y Cap. V (Incidentes, Auditoría Continua e IA)</span>
+              <h3 class="text-lg font-bold text-slate-900 mt-1 mb-4">RI-06: Bitácoras SIEM, Evidencia Digital y Sistemas de IA</h3>
+              <div class="overflow-x-auto rounded-2xl border border-slate-200">
+                <table class="w-full text-left text-sm">
+                  <thead class="bg-slate-50 text-slate-700 text-xs uppercase">
+                    <tr>
+                      <th class="px-4 py-3 font-semibold">Evidencia / Dato Requerido</th>
+                      <th class="px-4 py-3 font-semibold">Herramienta / Estándar</th>
+                      <th class="px-4 py-3 font-semibold">Ejemplo Concreto</th>
+                    </tr>
+                  </thead>
+                  <tbody class="divide-y divide-slate-200 text-slate-600 text-xs sm:text-sm">
+                    <tr>
+                      <td class="px-4 py-3 font-medium text-slate-900">Alertas SIEM y Paneles de Monitoreo</td>
+                      <td class="px-4 py-3">SIEM y Auditoría Continua</td>
+                      <td class="px-4 py-3">Correlación de accesos fuera de horario y verificación diaria de respaldos</td>
+                    </tr>
+                    <tr>
+                      <td class="px-4 py-3 font-medium text-slate-900">Evidencia Digital e Inventario de IA</td>
+                      <td class="px-4 py-3">ISO/IEC 27037, ISO 42001 y Ley 31814</td>
+                      <td class="px-4 py-3">Copias con suma de control (hash), cadena de custodia y control de <em>shadow AI</em></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- =============================================================== -->
+        <!-- SECCIÓN 7: MARCOS, PROCESO Y CASOS REALES (3 SLIDES)            -->
+        <!-- =============================================================== -->
+        <section id="mapeo" class="scroll-mt-24 space-y-6">
+          <div class="flex items-center justify-between flex-wrap gap-3">
+            <div class="flex items-center gap-3">
+              <span class="flex items-center justify-center w-10 h-10 rounded-2xl bg-indigo-600 text-white font-bold text-sm shadow-sm">07</span>
+              <div>
+                <h2 class="text-2xl font-bold text-slate-900">Mapeo Integrado: Marcos, Proceso y Casos Reales</h2>
+                <p class="text-sm text-slate-500">Articulación de criterios normativos, ciclo de auditoría y lecciones de incidentes reales</p>
+              </div>
+            </div>
+            <span class="px-3 py-1 rounded-full text-xs font-semibold bg-indigo-50 text-indigo-700 border border-indigo-100">3 Diapositivas</span>
+          </div>
+
+          <!-- Slide 1/3: Tabla Comparativa de Marcos y Estándares (Tabla 4 del PDF) -->
+          <div class="bg-white rounded-3xl p-6 shadow-sm border border-slate-200/80">
+            <span class="text-xs font-bold uppercase tracking-wider text-indigo-600">Slide 1/3 · Capítulo III (Tabla 4)</span>
+            <h3 class="text-lg font-bold text-slate-900 mt-1 mb-4">Comparativa de Marcos, Estándares y Normativa Aplicable</h3>
+            <div class="overflow-x-auto rounded-2xl border border-slate-200">
+              <table class="w-full text-left text-xs sm:text-sm">
+                <thead class="bg-indigo-950 text-white text-xs uppercase">
+                  <tr>
+                    <th class="px-4 py-3 font-semibold">Marco / Norma</th>
+                    <th class="px-4 py-3 font-semibold">Uso en la Auditoría</th>
+                    <th class="px-4 py-3 font-semibold">Resultado / Alcance</th>
+                  </tr>
+                </thead>
+                <tbody class="divide-y divide-slate-200 text-slate-600">
+                  <tr class="hover:bg-slate-50">
+                    <td class="px-4 py-3 font-semibold text-slate-900">COBIT 2019 (ISACA)</td>
+                    <td class="px-4 py-3">Criterios por proceso (APO10, APO12, APO13, BAI06, DSS04, DSS05, MEA03)</td>
+                    <td class="px-4 py-3">Evaluación de capacidad y brechas por objetivo</td>
+                  </tr>
+                  <tr class="hover:bg-slate-50">
+                    <td class="px-4 py-3 font-semibold text-slate-900">ISO/IEC 27001 y 27002:2022</td>
+                    <td class="px-4 py-3">Evalúa conformidad del SGSI y eficacia de 93 controles (4 temas)</td>
+                    <td class="px-4 py-3">Informe de auditoría y certificación vigente</td>
+                  </tr>
+                  <tr class="hover:bg-slate-50">
+                    <td class="px-4 py-3 font-semibold text-slate-900">NIST CSF 2.0 (2024)</td>
+                    <td class="px-4 py-3">Mide madurez en 6 funciones: Gobernar, Identificar, Proteger, Detectar, Responder, Recuperar</td>
+                    <td class="px-4 py-3">Perfil actual, objetivo y plan de cierre de brechas</td>
+                  </tr>
+                  <tr class="hover:bg-slate-50">
+                    <td class="px-4 py-3 font-semibold text-slate-900">ITAF y Normas IIA (2025/2026)</td>
+                    <td class="px-4 py-3">Cómo planificar y ejecutar; incluye Requisito Temático de Ciberseguridad (feb 2026)</td>
+                    <td class="px-4 py-3">Cobertura verificable de gobierno, riesgos y control</td>
+                  </tr>
+                  <tr class="hover:bg-slate-50">
+                    <td class="px-4 py-3 font-semibold text-slate-900">CIS v8.1 y Normativa Perú</td>
+                    <td class="px-4 py-3">18 controles técnicos CIS + Ley 29733 (DS 016-2024-JUS) y Res. SBS 504-2021</td>
+                    <td class="px-4 py-3">Higiene técnica y cumplimiento legal obligatorio</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- Slide 2/3: Diagrama de Flujo del Proceso de Auditoría (Figura 2 del PDF) -->
+          <div class="bg-white rounded-3xl p-6 shadow-sm border border-slate-200/80">
+            <span class="text-xs font-bold uppercase tracking-wider text-indigo-600">Slide 2/3 · Capítulo II (Figura 2 y Modelo de Tres Líneas)</span>
+            <h3 class="text-lg font-bold text-slate-900 mt-1 mb-4">Fases del Proceso de Auditoría de Seguridad de T.I.</h3>
+            <div class="w-full overflow-x-auto bg-slate-50 rounded-2xl p-4 border border-slate-200/80">
+              <svg viewBox="0 0 760 205" class="w-full h-auto min-w-[580px]" role="img" aria-label="Diagrama de las 4 fases del proceso de auditoría de seguridad de TI con retroalimentación">
+                <defs>
+                  <marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                    <path d="M 0 1 L 10 5 L 0 9 z" fill="#4f46e5" />
+                  </marker>
+                </defs>
+
+                <!-- Fase 1 -->
+                <rect x="15" y="25" width="160" height="96" rx="14" fill="#4f46e5" />
+                <text x="95" y="50" text-anchor="middle" fill="#ffffff" font-size="11.5" font-weight="700" font-family="Inter, sans-serif">1. PLANIFICACIÓN</text>
+                <text x="95" y="70" text-anchor="middle" fill="#e0e7ff" font-size="9.5" font-family="Inter, sans-serif">Entorno y riesgos (5×5)</text>
+                <text x="95" y="85" text-anchor="middle" fill="#e0e7ff" font-size="9.5" font-family="Inter, sans-serif">Objetivos y criterios</text>
+                <text x="95" y="100" text-anchor="middle" fill="#e0e7ff" font-size="9.5" font-family="Inter, sans-serif">Programa de trabajo</text>
+
+                <line x1="175" y1="73" x2="203" y2="73" stroke="#4f46e5" stroke-width="2" marker-end="url(#arrow)" />
+
+                <!-- Fase 2 -->
+                <rect x="208" y="25" width="160" height="96" rx="14" fill="#ffffff" stroke="#4f46e5" stroke-width="2" />
+                <text x="288" y="50" text-anchor="middle" fill="#1e293b" font-size="11.5" font-weight="700" font-family="Inter, sans-serif">2. EJECUCIÓN</text>
+                <text x="288" y="70" text-anchor="middle" fill="#475569" font-size="9.5" font-family="Inter, sans-serif">Evidencia suficiente</text>
+                <text x="288" y="85" text-anchor="middle" fill="#475569" font-size="9.5" font-family="Inter, sans-serif">Pruebas y CAATs</text>
+                <text x="288" y="100" text-anchor="middle" fill="#475569" font-size="9.5" font-family="Inter, sans-serif">Papeles de trabajo</text>
+
+                <line x1="368" y1="73" x2="396" y2="73" stroke="#4f46e5" stroke-width="2" marker-end="url(#arrow)" />
+
+                <!-- Fase 3 -->
+                <rect x="401" y="25" width="160" height="96" rx="14" fill="#eef2ff" stroke="#4f46e5" stroke-width="2" />
+                <text x="481" y="50" text-anchor="middle" fill="#312e81" font-size="11.5" font-weight="700" font-family="Inter, sans-serif">3. INFORME</text>
+                <text x="481" y="70" text-anchor="middle" fill="#3730a3" font-size="9.5" font-family="Inter, sans-serif">Condición, Criterio,</text>
+                <text x="481" y="85" text-anchor="middle" fill="#3730a3" font-size="9.5" font-family="Inter, sans-serif">Causa, Efecto y Rec.</text>
+                <text x="481" y="100" text-anchor="middle" fill="#3730a3" font-size="9.5" font-family="Inter, sans-serif">Severidad y opinión</text>
+
+                <line x1="561" y1="73" x2="589" y2="73" stroke="#10b981" stroke-width="2" marker-end="url(#arrow)" />
+
+                <!-- Fase 4 -->
+                <rect x="594" y="25" width="150" height="96" rx="14" fill="#0f172a" />
+                <text x="669" y="50" text-anchor="middle" fill="#ffffff" font-size="11.5" font-weight="700" font-family="Inter, sans-serif">4. SEGUIMIENTO</text>
+                <text x="669" y="70" text-anchor="middle" fill="#cbd5e1" font-size="9.5" font-family="Inter, sans-serif">Plan de acción y fechas</text>
+                <text x="669" y="85" text-anchor="middle" fill="#cbd5e1" font-size="9.5" font-family="Inter, sans-serif">Verificación de cierre</text>
+                <text x="669" y="100" text-anchor="middle" fill="#cbd5e1" font-size="9.5" font-family="Inter, sans-serif">Escalamiento al Comité</text>
+
+                <!-- Retroalimentación -->
+                <path d="M 669 121 L 669 168 L 95 168 L 95 127" fill="none" stroke="#6366f1" stroke-width="2" stroke-dasharray="6,4" marker-end="url(#arrow)" />
+                <rect x="200" y="153" width="360" height="28" rx="8" fill="#ffffff" stroke="#6366f1" stroke-width="1.5" />
+                <text x="380" y="171" text-anchor="middle" fill="#312e81" font-size="9.5" font-weight="700" font-family="Inter, sans-serif">Retroalimentación: actualiza universo auditable y matriz de riesgos (3.ª Línea IIA)</text>
+              </svg>
+            </div>
+          </div>
+
+          <!-- Slide 3/3: Casos de Estudio Reales (Capítulo VI del PDF) -->
+          <div class="bg-white rounded-3xl p-6 shadow-sm border border-slate-200/80">
+            <span class="text-xs font-bold uppercase tracking-wider text-indigo-600">Slide 3/3 · Capítulo VI (Tabla 7)</span>
+            <h3 class="text-lg font-bold text-slate-900 mt-1 mb-3">Casos de Estudio Reales: Evidencia del Valor de la Auditoría</h3>
+            <p class="text-sm text-slate-600 mb-4">
+              Dos incidentes de alto impacto que confirman cómo fallas básicas de control y una débil gestión de terceros derivan en crisis sistémicas:
+            </p>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+              <!-- Caso 1: Change Healthcare -->
+              <div class="p-5 rounded-2xl bg-rose-50/60 border border-rose-200/80 space-y-2.5">
+                <div class="flex items-center justify-between gap-2">
+                  <span class="text-xs font-bold text-rose-700 uppercase">Caso 1 · Change Healthcare (2024)</span>
+                  <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-rose-100 text-rose-800">Ransomware</span>
+                </div>
+                <p class="text-xs text-slate-700 leading-relaxed">
+                  <strong>Vector e Impacto:</strong> Acceso remoto con credenciales robadas <strong>sin MFA</strong> (grupo ALPHV/BlackCat). Permanecieron ~9 días en red, robaron 6 TB, se pagó un rescate de <strong>$22 millones</strong> y se expusieron datos de ~<strong>190 millones de personas</strong>.
+                </p>
+                <p class="text-xs text-slate-700 leading-relaxed">
+                  <strong>Hallazgo de Auditoría (COBIT DSS05, APO12, DSS04):</strong> Un cruce simple de cuentas remotas contra configuración MFA y pruebas de recuperación habrían advertido la falla antes del ataque.
+                </p>
+              </div>
+
+              <!-- Caso 2: SolarWinds -->
+              <div class="p-5 rounded-2xl bg-amber-50/60 border border-amber-200/80 space-y-2.5">
+                <div class="flex items-center justify-between gap-2">
+                  <span class="text-xs font-bold text-amber-800 uppercase">Caso 2 · SolarWinds (2020)</span>
+                  <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-100 text-amber-900">Cadena de Suministro</span>
+                </div>
+                <p class="text-xs text-slate-700 leading-relaxed">
+                  <strong>Vector e Impacto:</strong> Código malicioso (<strong>SUNBURST</strong>) inyectado en el proceso de compilación de Orion y distribuido como actualización legítima firmada a cerca de <strong>18 000 clientes</strong> durante meses sin detección.
+                </p>
+                <p class="text-xs text-slate-700 leading-relaxed">
+                  <strong>Hallazgo de Auditoría (COBIT APO10 y NIST CSF 2.0 Gobernar):</strong> Faltó aseguramiento de proveedores críticos (SOC 2 / ISO 27001), inventario SBOM, segmentación de privilegios y monitoreo de tráfico saliente.
+                </p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- =============================================================== -->
+        <!-- SECCIÓN 8: CONCLUSIONES Y RECOMENDACIONES                       -->
+        <!-- =============================================================== -->
+        <section id="conclusiones" class="scroll-mt-24 bg-gradient-to-br from-indigo-950 to-slate-900 text-white rounded-3xl p-6 sm:p-8 shadow-lg border border-slate-800">
+          <div class="flex items-center gap-3 mb-6">
+            <span class="flex items-center justify-center w-10 h-10 rounded-2xl bg-indigo-500/20 text-indigo-300 font-bold text-sm border border-indigo-400/30">08</span>
+            <div>
+              <h2 class="text-2xl font-bold text-white">Conclusiones y Recomendaciones</h2>
+              <p class="text-sm text-indigo-200">Síntesis final de la monografía del Grupo 06 (UNJFSC · 2026)</p>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
+            <div class="bg-white/5 border border-white/10 rounded-2xl p-4">
+              <h3 class="text-sm font-bold text-indigo-300 mb-1.5">1. Aseguramiento Basado en Riesgos</h3>
+              <p class="text-xs sm:text-sm text-slate-300 leading-relaxed">La auditoría de seguridad aporta una opinión independiente y objetiva que protege la tríada CIA, sustenta las decisiones de la alta dirección y fortalece la resiliencia tecnológica.</p>
+            </div>
+            <div class="bg-white/5 border border-white/10 rounded-2xl p-4">
+              <h3 class="text-sm font-bold text-indigo-300 mb-1.5">2. Estándares y Exigencia 2026</h3>
+              <p class="text-xs sm:text-sm text-slate-300 leading-relaxed">COBIT 2019, ISO/IEC 27001:2022, NIST CSF 2.0 y el Requisito Temático de Ciberseguridad del IIA (febrero 2026) hacen verificable la cobertura de gobierno, riesgos y controles.</p>
+            </div>
+            <div class="bg-white/5 border border-white/10 rounded-2xl p-4">
+              <h3 class="text-sm font-bold text-indigo-300 mb-1.5">3. Controles Básicos y Terceros</h3>
+              <p class="text-xs sm:text-sm text-slate-300 leading-relaxed">Change Healthcare y SolarWinds prueban que las crisis nacen de omitir controles esenciales: MFA, gestión de parches, respaldos aislados probados y evaluación de proveedores.</p>
+            </div>
+            <div class="bg-white/5 border border-white/10 rounded-2xl p-4">
+              <h3 class="text-sm font-bold text-indigo-300 mb-1.5">4. Auditoría Continua e IA</h3>
+              <p class="text-xs sm:text-sm text-slate-300 leading-relaxed">Con brechas promedio de $4,99M (IBM, 2026), es prioritario adoptar CAATs, monitoreo continuo, participación temprana en proyectos de nube/IA y cumplimiento del DS 016-2024-JUS en Perú.</p>
+            </div>
+          </div>
+
+          <div class="p-4 rounded-2xl bg-indigo-500/20 border border-indigo-400/30 text-sm text-indigo-100 leading-relaxed">
+            <strong>Recomendación Clave:</strong> Consolidar una función de auditoría de seguridad independiente con acceso directo al Comité de Auditoría, formación continua del equipo y seguimiento riguroso de los planes de acción hasta su cierre verificado.
+          </div>
+        </section>
+
+        <!-- =============================================================== -->
+        <!-- CRÉDITOS MÓVIL (VISIBLE SOLO EN MÓVIL/TABLET: lg:hidden)        -->
+        <!-- =============================================================== -->
+        <section id="creditos-movil" class="lg:hidden scroll-mt-24 bg-white rounded-3xl p-6 shadow-sm border border-slate-200/80 space-y-5">
+          <div class="flex items-center gap-2.5">
+            <div class="w-9 h-9 rounded-xl bg-indigo-50 text-indigo-600 flex items-center justify-center">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z" />
+              </svg>
+            </div>
+            <div>
+              <h2 class="text-lg font-bold text-slate-900">Equipo de Investigación</h2>
+              <p class="text-xs text-slate-500">5 Integrantes · Information Technology Audit</p>
+            </div>
+          </div>
+
+          <!-- Lista de 5 Integrantes (Móvil) -->
+          <ul class="divide-y divide-slate-100 text-sm">
+            <li class="py-2.5 flex items-center gap-3">
+              <span class="w-8 h-8 rounded-full bg-indigo-100 text-indigo-700 font-bold text-xs flex items-center justify-center shrink-0">AG</span>
+              <span class="font-medium text-slate-800">ALVARADO POZO, GENESIS</span>
+            </li>
+            <li class="py-2.5 flex items-center gap-3">
+              <span class="w-8 h-8 rounded-full bg-sky-100 text-sky-700 font-bold text-xs flex items-center justify-center shrink-0">CB</span>
+              <span class="font-medium text-slate-800">CARLOS SUSANIBAR, BRAYAN</span>
+            </li>
+            <li class="py-2.5 flex items-center gap-3">
+              <span class="w-8 h-8 rounded-full bg-emerald-100 text-emerald-700 font-bold text-xs flex items-center justify-center shrink-0">CL</span>
+              <span class="font-medium text-slate-800">CHANGANA SOSA, LIZBET</span>
+            </li>
+            <li class="py-2.5 flex items-center gap-3">
+              <span class="w-8 h-8 rounded-full bg-amber-100 text-amber-700 font-bold text-xs flex items-center justify-center shrink-0">DA</span>
+              <span class="font-medium text-slate-800">DIAZ HUACHO, ANGIE</span>
+            </li>
+            <li class="py-2.5 flex items-center gap-3">
+              <span class="w-8 h-8 rounded-full bg-violet-100 text-violet-700 font-bold text-xs flex items-center justify-center shrink-0">TC</span>
+              <span class="font-medium text-slate-800">TAHUA CASTILLO, CRISTHIAN</span>
+            </li>
+          </ul>
+
+          <!-- Botón de Recursos en Móvil -->
+          <div class="pt-2 flex flex-col sm:flex-row gap-3">
+            <button type="button" onclick="downloadStudyGuide()" class="flex-1 inline-flex items-center justify-center gap-2 px-4 py-3 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-semibold shadow-sm transition-colors">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" /></svg>
+              Descargar Guía (.txt)
+            </button>
+            <button type="button" onclick="copyCitation()" class="flex-1 inline-flex items-center justify-center gap-2 px-4 py-3 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-sm font-semibold transition-colors">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" /></svg>
+              Copiar Cita APA
+            </button>
+          </div>
+        </section>
+
+      </main>
+
+      <!-- ================================================================= -->
+      <!-- COLUMNA DERECHA: SIDEBAR FIJO (SOLO DESKTOP: hidden lg:block)     -->
+      <!-- ================================================================= -->
+      <aside class="hidden lg:block lg:col-span-4 sticky top-24 space-y-6">
+
+        <!-- 1. Tabla de Contenidos Sticky -->
+        <div class="bg-white rounded-3xl p-6 shadow-sm border border-slate-200/80">
+          <div class="flex items-center gap-2 mb-4">
+            <svg class="w-5 h-5 text-indigo-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 10h16M4 14h16M4 18h16" />
+            </svg>
+            <h2 class="text-sm font-bold uppercase tracking-wider text-slate-900">En esta página</h2>
+          </div>
+
+          <nav id="toc-nav" class="space-y-1 text-sm" aria-label="Tabla de contenidos">
+            <a href="#portada" data-section="portada" class="toc-link block px-3 py-2 rounded-xl text-slate-600 hover:text-indigo-600 hover:bg-indigo-50/70 transition-colors">1. Portada UNJFSC</a>
+            <a href="#indice" data-section="indice" class="toc-link block px-3 py-2 rounded-xl text-slate-600 hover:text-indigo-600 hover:bg-indigo-50/70 transition-colors">2. Índice General</a>
+            <a href="#introduccion" data-section="introduccion" class="toc-link block px-3 py-2 rounded-xl text-slate-600 hover:text-indigo-600 hover:bg-indigo-50/70 transition-colors">3. Introducción y Fundamentos</a>
+            <a href="#objetivos" data-section="objetivos" class="toc-link block px-3 py-2 rounded-xl text-slate-600 hover:text-indigo-600 hover:bg-indigo-50/70 transition-colors">4. Objetivos de Auditoría (5)</a>
+            <a href="#funcionalidades" data-section="funcionalidades" class="toc-link block px-3 py-2 rounded-xl text-slate-600 hover:text-indigo-600 hover:bg-indigo-50/70 transition-colors">5. Áreas Auditables (6)</a>
+            <a href="#requisitos" data-section="requisitos" class="toc-link block px-3 py-2 rounded-xl text-slate-600 hover:text-indigo-600 hover:bg-indigo-50/70 transition-colors">6. Evidencias y CAATs (6)</a>
+            <a href="#mapeo" data-section="mapeo" class="toc-link block px-3 py-2 rounded-xl text-slate-600 hover:text-indigo-600 hover:bg-indigo-50/70 transition-colors">7. Marcos, Proceso y Casos (3)</a>
+            <a href="#conclusiones" data-section="conclusiones" class="toc-link block px-3 py-2 rounded-xl text-slate-600 hover:text-indigo-600 hover:bg-indigo-50/70 transition-colors">8. Conclusiones y Rec.</a>
+          </nav>
+        </div>
+
+        <!-- 2. Tarjeta de Autores (5 Integrantes) -->
+        <div class="bg-white rounded-3xl p-6 shadow-sm border border-slate-200/80">
+          <div class="flex items-center justify-between mb-4">
+            <div class="flex items-center gap-2">
+              <svg class="w-5 h-5 text-indigo-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
+              </svg>
+              <h2 class="text-sm font-bold uppercase tracking-wider text-slate-900">Autores</h2>
+            </div>
+            <span class="text-xs font-semibold text-indigo-600 bg-indigo-50 px-2.5 py-0.5 rounded-full">5 Integrantes</span>
+          </div>
+
+          <ul class="space-y-3 text-sm">
+            <li class="flex items-center gap-3">
+              <span class="w-8 h-8 rounded-full bg-indigo-100 text-indigo-700 font-bold text-xs flex items-center justify-center shrink-0">AG</span>
+              <span class="font-medium text-slate-700 leading-snug">ALVARADO POZO, GENESIS</span>
+            </li>
+            <li class="flex items-center gap-3">
+              <span class="w-8 h-8 rounded-full bg-sky-100 text-sky-700 font-bold text-xs flex items-center justify-center shrink-0">CB</span>
+              <span class="font-medium text-slate-700 leading-snug">CARLOS SUSANIBAR, BRAYAN</span>
+            </li>
+            <li class="flex items-center gap-3">
+              <span class="w-8 h-8 rounded-full bg-emerald-100 text-emerald-700 font-bold text-xs flex items-center justify-center shrink-0">CL</span>
+              <span class="font-medium text-slate-700 leading-snug">CHANGANA SOSA, LIZBET</span>
+            </li>
+            <li class="flex items-center gap-3">
+              <span class="w-8 h-8 rounded-full bg-amber-100 text-amber-700 font-bold text-xs flex items-center justify-center shrink-0">DA</span>
+              <span class="font-medium text-slate-700 leading-snug">DIAZ HUACHO, ANGIE</span>
+            </li>
+            <li class="flex items-center gap-3">
+              <span class="w-8 h-8 rounded-full bg-violet-100 text-violet-700 font-bold text-xs flex items-center justify-center shrink-0">TC</span>
+              <span class="font-medium text-slate-700 leading-snug">TAHUA CASTILLO, CRISTHIAN</span>
+            </li>
+          </ul>
+        </div>
+
+        <!-- 3. Caja de Recursos -->
+        <div class="bg-gradient-to-br from-indigo-600 to-indigo-800 rounded-3xl p-6 text-white shadow-md">
+          <div class="flex items-center gap-2 mb-2">
+            <svg class="w-5 h-5 text-indigo-200" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+            </svg>
+            <h2 class="text-sm font-bold uppercase tracking-wider">Caja de Recursos</h2>
+          </div>
+          <p class="text-xs text-indigo-100 leading-relaxed mb-4">
+            Descarga el resumen estructurado del curso o copia la referencia bibliográfica para tus trabajos académicos.
+          </p>
+          <div class="space-y-2.5">
+            <button
+              type="button"
+              onclick="downloadStudyGuide()"
+              class="w-full inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-white text-indigo-700 hover:bg-indigo-50 text-sm font-semibold shadow-sm transition-colors"
+            >
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+              </svg>
+              Descargar Material de Estudio
+            </button>
+            <button
+              type="button"
+              onclick="copyCitation()"
+              class="w-full inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-indigo-500/40 hover:bg-indigo-500/60 border border-indigo-400/40 text-white text-sm font-medium transition-colors"
+            >
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
+              </svg>
+              Copiar Cita APA
+            </button>
+          </div>
+        </div>
+
+      </aside>
+    </div>
+  </div>
+
+  <!-- ===================================================================== -->
+  <!-- FOOTER: CRÉDITOS, COPYRIGHT Y ENLACES LEGALES                         -->
+  <!-- ===================================================================== -->
+  <footer class="bg-white border-t border-slate-200 mt-12">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+      <div class="flex flex-col md:flex-row items-center justify-between gap-6">
+        <div class="text-center md:text-left">
+          <p class="text-sm font-bold text-slate-900">UNJFSC · Facultad de Ingeniería Industrial, Sistemas e Informática</p>
+          <p class="text-xs text-slate-500 mt-1">
+            © 2026 Grupo 06 — Curso Information Technology Audit (Docente: Fernando Sosimo Costilla Retuerto). Huacho, Perú.
+          </p>
+        </div>
+
+        <div class="flex flex-wrap items-center justify-center gap-5 text-xs font-medium text-slate-500">
+          <a href="#portada" class="hover:text-indigo-600 transition-colors">Inicio</a>
+          <a href="#indice" class="hover:text-indigo-600 transition-colors">Mapa de Contenidos</a>
+          <button type="button" onclick="showToast('Licencia Creative Commons BY-NC-SA 4.0 para uso académico.')" class="hover:text-indigo-600 transition-colors">Licencia Académica</button>
+          <button type="button" onclick="showToast('Este portal no recopila datos personales ni utiliza cookies de rastreo.')" class="hover:text-indigo-600 transition-colors">Privacidad</button>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ===================================================================== -->
+  <!-- NOTIFICACIÓN TOAST (REEMPLAZA alert() DE FORMA ELEGANTE)              -->
+  <!-- ===================================================================== -->
+  <div
+    id="toast-notification"
+    role="status"
+    aria-live="polite"
+    class="fixed bottom-5 right-5 z-50 max-w-sm transform translate-y-24 opacity-0 pointer-events-none transition-all duration-300 ease-out"
+  >
+    <div class="flex items-center gap-3 bg-slate-900 text-white px-4 py-3.5 rounded-2xl shadow-xl border border-slate-700 text-sm">
+      <svg class="w-5 h-5 text-emerald-400 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+      </svg>
+      <span id="toast-message">Acción completada correctamente.</span>
+    </div>
+  </div>
+
+  <!-- ===================================================================== -->
+  <!-- JAVASCRIPT PURO (VANILLA JS)                                          -->
+  <!-- ===================================================================== -->
+  <script>
+    (function () {
+      'use strict';
+
+      // -------------------------------------------------------------------
+      // 1. BARRA DE PROGRESO DE LECTURA
+      // -------------------------------------------------------------------
+      const progressBar = document.getElementById('reading-progress-bar');
+
+      function updateReadingProgress() {
+        try {
+          const scrollTop = window.scrollY || document.documentElement.scrollTop;
+          const docHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+          const progress = docHeight > 0 ? Math.min((scrollTop / docHeight) * 100, 100) : 0;
+          if (progressBar) {
+            progressBar.style.width = progress.toFixed(2) + '%';
+          }
+        } catch (err) {
+          console.error('Error actualizando la barra de progreso:', err);
+        }
+      }
+
+      window.addEventListener('scroll', updateReadingProgress, { passive: true });
+      window.addEventListener('resize', updateReadingProgress, { passive: true });
+      updateReadingProgress();
+
+      // -------------------------------------------------------------------
+      // 2. MENÚ HAMBURGUESA MÓVIL
+      // -------------------------------------------------------------------
+      const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+      const mobileMenu = document.getElementById('mobile-menu');
+      const iconHamburger = document.getElementById('icon-hamburger');
+      const iconClose = document.getElementById('icon-close');
+      const mobileNavLinks = document.querySelectorAll('.mobile-nav-link');
+
+      function toggleMobileMenu(forceClose = false) {
+        if (!mobileMenu || !mobileMenuBtn) return;
+        const isCurrentlyHidden = mobileMenu.classList.contains('hidden');
+        const shouldOpen = forceClose ? false : isCurrentlyHidden;
+
+        mobileMenu.classList.toggle('hidden', !shouldOpen);
+        mobileMenuBtn.setAttribute('aria-expanded', String(shouldOpen));
+        if (iconHamburger && iconClose) {
+          iconHamburger.classList.toggle('hidden', shouldOpen);
+          iconClose.classList.toggle('hidden', !shouldOpen);
+        }
+      }
+
+      if (mobileMenuBtn) {
+        mobileMenuBtn.addEventListener('click', function () {
+          toggleMobileMenu(false);
+        });
+      }
+
+      // Cerrar menú móvil automáticamente al hacer clic en un enlace
+      mobileNavLinks.forEach(function (link) {
+        link.addEventListener('click', function () {
+          toggleMobileMenu(true);
+        });
+      });
+
+      // -------------------------------------------------------------------
+      // 3. RESALTADO ACTIVO EN LA TABLA DE CONTENIDOS (SIDEBAR DESKTOP)
+      // -------------------------------------------------------------------
+      const sections = document.querySelectorAll('main section[id]');
+      const tocLinks = document.querySelectorAll('.toc-link');
+
+      if ('IntersectionObserver' in window && sections.length > 0 && tocLinks.length > 0) {
+        const observerOptions = {
+          root: null,
+          rootMargin: '-20% 0px -65% 0px',
+          threshold: 0
+        };
+
+        const sectionObserver = new IntersectionObserver(function (entries) {
+          entries.forEach(function (entry) {
+            if (entry.isIntersecting) {
+              const activeId = entry.target.getAttribute('id');
+              tocLinks.forEach(function (link) {
+                const isMatch = link.getAttribute('data-section') === activeId;
+                link.classList.toggle('bg-indigo-50', isMatch);
+                link.classList.toggle('text-indigo-700', isMatch);
+                link.classList.toggle('font-semibold', isMatch);
+                link.classList.toggle('text-slate-600', !isMatch);
+              });
+            }
+          });
+        }, observerOptions);
+
+        sections.forEach(function (sec) {
+          sectionObserver.observe(sec);
+        });
+      }
+
+      // -------------------------------------------------------------------
+      // 4. NOTIFICACIONES TOAST (SIN USAR alert())
+      // -------------------------------------------------------------------
+      let toastTimeout = null;
+      window.showToast = function (message) {
+        const toast = document.getElementById('toast-notification');
+        const toastMsg = document.getElementById('toast-message');
+        if (!toast || !toastMsg) return;
+
+        toastMsg.textContent = message;
+        toast.classList.remove('translate-y-24', 'opacity-0', 'pointer-events-none');
+        toast.classList.add('translate-y-0', 'opacity-100');
+
+        clearTimeout(toastTimeout);
+        toastTimeout = setTimeout(function () {
+          toast.classList.add('translate-y-24', 'opacity-0', 'pointer-events-none');
+          toast.classList.remove('translate-y-0', 'opacity-100');
+        }, 3500);
+      };
+
+      // -------------------------------------------------------------------
+      // 5. DESCARGA DE MATERIAL DE ESTUDIO (ARCHIVO .TXT GENERADO EN CLIENTE)
+      // -------------------------------------------------------------------
+      window.downloadStudyGuide = function () {
+        try {
+          const content = [
+            'GUIA DE ESTUDIO: AUDITORIA DE LA SEGURIDAD DE LAS T.I.',
+            'Universidad Nacional Jose Faustino Sanchez Carrion (UNJFSC)',
+            'Facultad de Ingenieria Industrial, Sistemas e Informatica',
+            'Escuela Profesional de Ingenieria de Sistemas',
+            'Curso: Information Technology Audit | Docente: Costilla Retuerto Fernando Sosimo',
+            'Huacho - Peru | 2026',
+            '========================================================================',
+            '',
+            'AUTORES (GRUPO 06):',
+            '- ALVARADO POZO, GENESIS',
+            '- CARLOS SUSANIBAR, BRAYAN',
+            '- CHANGANA SOSA, LIZBET',
+            '- DIAZ HUACHO, ANGIE',
+            '- TAHUA CASTILLO, CRISTHIAN',
+            '',
+            '1. OBJETIVOS DE LA AUDITORIA DE SEGURIDAD (5):',
+            '   1) Salvaguarda de activos (Triada CIA + trazabilidad y resiliencia)',
+            '   2) Eficacia de los controles (diseno y operacion consistente)',
+            '   3) Capacidad de deteccion, respuesta y recuperacion',
+            '   4) Gestion del riesgo tecnologico, proveedores, nube e IA',
+            '   5) Cumplimiento normativo (ISO 27001:2022, COBIT 2019, NIST CSF 2.0, IIA 2026, Ley 29733/DS 016-2024-JUS, SBS 504-2021)',
+            '',
+            '2. AREAS AUDITABLES DEL ENTORNO TECNOLOGICO (6):',
+            '   4.1 Gobierno de la Seguridad',
+            '   4.2 Seguridad Logica y Control de Accesos (IAM, MFA, RBAC)',
+            '   4.3 Seguridad de Aplicaciones, DevSecOps y Cadena de Suministro (SBOM)',
+            '   4.4 Seguridad de Datos y Bases de Datos (cifrado, DLP, respaldos inmutables)',
+            '   4.5 Infraestructura, Redes y Nube (CSPM, responsabilidad compartida, parches)',
+            '   4.6 Gestion de Incidentes y Resiliencia (SIEM, SOC, simulacros)',
+            '',
+            '3. CASOS DE ESTUDIO REALES:',
+            '   - Change Healthcare (2024): Credenciales sin MFA, 6 TB robados, $22M rescate, ~190M afectados.',
+            '   - SolarWinds (2020): Malware SUNBURST en compilacion de Orion, ~18,000 clientes afectados.',
+            ''
+          ].join('\n');
+
+          const blob = new Blob([content], { type: 'text/plain;charset=utf-8' });
+          const url = URL.createObjectURL(blob);
+          const a = document.createElement('a');
+          a.href = url;
+          a.download = 'Resumen_Grupo06_Auditoria_Seguridad_TI_UNJFSC.txt';
+          document.body.appendChild(a);
+          a.click();
+          document.body.removeChild(a);
+          URL.revokeObjectURL(url);
+
+          window.showToast('Resumen de la monografía descargado correctamente.');
+        } catch (err) {
+          console.error('Error al descargar guía:', err);
+          window.showToast('No se pudo generar la descarga.');
+        }
+      };
+
+      // -------------------------------------------------------------------
+      // 6. COPIAR CITA APA USANDO document.execCommand('copy')
+      // -------------------------------------------------------------------
+      window.copyCitation = function () {
+        const citation = 'Alvarado Pozo, G., Carlos Susanibar, B., Changana Sosa, L., Diaz Huacho, A., & Tahua Castillo, C. (2026). Auditoría de la Seguridad de las Tecnologías de la Información [Monografía educativa, Grupo 06]. Universidad Nacional José Faustino Sánchez Carrión, Huacho, Perú.';
+        try {
+          const tempInput = document.createElement('textarea');
+          tempInput.value = citation;
+          tempInput.setAttribute('readonly', '');
+          tempInput.style.position = 'fixed';
+          tempInput.style.opacity = '0';
+          document.body.appendChild(tempInput);
+          tempInput.select();
+          document.execCommand('copy');
+          document.body.removeChild(tempInput);
+          window.showToast('Cita APA copiada al portapapeles.');
+        } catch (err) {
+          console.error('Error al copiar cita:', err);
+          window.showToast('No se pudo copiar la cita.');
+        }
+      };
+    })();
+  </script>
+</body>
+</html>
